@@ -20,10 +20,17 @@ import HelloWorld from './components/HelloWorld.vue'
         </RouterLink>
         <RouterLink 
           active-class="active" 
-          class="btn btn-outline-primary" 
+          class="btn btn-outline-primary me-2" 
           to="/pokemons"
         >
           Pokemons
+        </RouterLink>
+        <RouterLink 
+          active-class="active" 
+          class="btn btn-outline-primary" 
+          to="/favoritos"
+        >
+          Favoritos
         </RouterLink>
       </div>
     </div>
