@@ -1,28 +1,39 @@
 <script setup>
-import axios from 'axios';
-import { ref } from 'vue';
 import { RouterLink } from 'vue-router';
+import { useGetData } from '../composables/getData';
 
-const pokemons = ref([]);
+const {data, error, getData, loading} = useGetData();
 
-const getData = async () => {
-  try {
-    const { data } = await axios.get("https://pokeapi.co/api/v2/pokemon");
-    pokemons.value = data.results;
-  } catch (error) {
-    console.log(error);
-  }
-}
+getData("https://pokeapi.co/api/v2/pokemon");
 
-getData();
 </script>
 <template>
   <h1>Mostrando pokemons</h1>
-  <ul>
-    <li v-for="pokemon in pokemons">
-      <RouterLink :to="`/pokemons/${pokemon.name}`">
-        {{ pokemon.name }}
-      </RouterLink>
-    </li>
-  </ul>
+  <div v-if="error" class="alert alert-danger mt-2">{{ error }}</div>
+  <p v-if="loading">Cargando información...</p>
+  <template v-if="data">
+    <ul class="list-group">
+      <li v-for="pokemon in data.results" class="list-group-item">
+        <RouterLink :to="`/pokemons/${pokemon.name}`">
+          {{ pokemon.name }}
+        </RouterLink>
+      </li>
+    </ul>
+    <div class="mt-2">
+      <button 
+        :disabled="!data.previous"
+        class="btn btn-primary me-2"
+        @click="getData(data.previous)"
+      >
+        Previous
+      </button>
+      <button 
+        :disabled="!data.next"
+        class="btn btn-success"
+        @click="getData(data.next)"
+      >
+        Next
+      </button>
+    </div>
+  </template>
 </template>
